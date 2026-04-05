@@ -1,6 +1,6 @@
 class Solution {
   public:
-    int solve(vector<int>& arr ,int target , int idx, vector<vector<int>> &dp)
+   int solve(vector<int>& arr ,int target , int idx, vector<vector<int>> &dp)
     {
         if(target < 0) return 0 ;
         
@@ -20,10 +20,11 @@ class Solution {
         
         return dp[idx][target] = take + not_take;
     }
-
-    long long findTargetSumWays(int n, vector<int>& arr, int target) {
-        int sum = accumulate(arr.begin(), arr.end(), 0);
-        
+// 
+    int totalWays(vector<int>& arr, int target) {
+        //  code here
+                int sum = accumulate(arr.begin(), arr.end(), 0);
+        int n=  arr.size() ;
         if(sum < abs(target)) return 0;
         if((sum + target) % 2 != 0) return 0;
         
