@@ -1,32 +1,37 @@
 class Solution {
   public:
-    bool dfs(unordered_map<int ,vector<int>>&mp , int u,vector<bool>&visited ,vector<bool>&inreccursion)
-    {
-        visited[u] = true ;
-        inreccursion[u] = true; 
-        for(auto v : mp[u])
+
+
+
+    vector<int> topoSort(int V, vector<vector<int>>& edges) {
+        // code here
+        unordered_map<int , vector<int>> mp ;
+        vector<int> result ;
+        vector<int> indegree(V  , 0) ;
+        for(auto it  : edges)
         {
-            if(visited[v] && inreccursion[v]) return true ;
-            else if(visited[v]) continue ;
-            
-            if(dfs(mp ,v , visited, inreccursion)) return true  ;
+            int u = it[0] ;int v = it[1] ;
+            indegree[v]++ ;
+            mp[u].push_back(v) ;
         }
-        inreccursion[u] = false ;
-        return false ;
+        queue<int>q ;
+        for(int i = 0;i <V ;i++) if(indegree[i] == 0 ) q.push(i) ;
+        while(!q.empty() )
+        {
+            int u = q.front() ; q.pop() ;
+            result.push_back(u) ;
+            for(int v : mp[u])
+            {
+                indegree[v]-- ;
+                if(indegree[v] == 0) q.push(v) ;
+            }
+        }
+        return result ;
     }
     bool isCyclic(int V, vector<vector<int>> &edges) {
         // code here
-        unordered_map<int , vector<int>> mp ;
-        for(auto it : edges)
-        {
-            int u = it[0] ; int v = it[1] ;
-            mp[u].push_back(v) ;
-        }
-        vector<bool>visited(V ,false ) , inreccursion(V , false ) ;
-        for(int i =0;i<V ;i++)
-        {
-            if(!visited[i] && dfs(mp ,i ,visited,inreccursion)) return true ;
-        }
-        return false; 
+        vector<int> result = topoSort(V , edges) ;
+        if(result.size() ==  V ) return false  ;
+        return true  ;
     }
 };
